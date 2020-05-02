@@ -4,36 +4,39 @@ import 'package:shared_preferences/shared_preferences.dart';
 int _selectedIndex = 0;
 
 class HomePage extends StatelessWidget {
- static String tag = 'home-page';
+  static String tag = 'home-page';
 static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-String address;
-
-
-
- Future<String> setUserid() async {
-   SharedPreferences pref = await SharedPreferences.getInstance();
-   pref.getString("address");
-
-   address = pref.getString('FB_USER');
-
- }
-
-
-
-
-
-
-
-
 
 
 
  @override
   Widget build(BuildContext context) {
+   String _address;
+  // String family_head;
+  // String cnic;
+
+   var address;
+   var family_head = TextEditingController();
+   var cnic = TextEditingController();
+
+   void loginRequest () async {
+
+
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     _address = prefs.getString('address');
+     print("Socha na thaa" + _address);
+     address =  new TextEditingController.fromValue(new TextEditingValue(text: _address)).value;
+
+
+   }
+
+
+   loginRequest();
 
 
 
-    final alucard = Hero(
+
+   final alucard = Hero(
       tag: 'hero',
       child: CircleAvatar(
         radius: 40.0,
@@ -100,12 +103,9 @@ String address;
 
 
     final familyHeadNameTextBox = new TextField(
-
-
-
-
+      controller: address,
       decoration: new InputDecoration(
-        hintText: ("Address"),
+        hintText: ("Dildar Khan "),
         prefixIcon: Icon(Icons.person),
 
       ),
@@ -241,7 +241,7 @@ String address;
     final addressTxtBox = new TextField(
 
       decoration: new InputDecoration(
-        hintText: ("Address"),
+        hintText: ('Landhi no. 3'),
         prefixIcon: Icon(Icons.home),
 
       ),
@@ -314,6 +314,8 @@ String address;
         body: body,
 
     );
+
+
   }
 
 
