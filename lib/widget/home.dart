@@ -99,24 +99,19 @@ String address;
 
 
 
-    final familyHeadNameTextBox = InkWell(
-
-      child: IgnorePointer(
-        child: new TextField(
+    final familyHeadNameTextBox = new TextField(
 
 
 
 
-          decoration: new InputDecoration(
-            hintText: ("Address"),
-            prefixIcon: Icon(Icons.person),
+      decoration: new InputDecoration(
+        hintText: ("Address"),
+        prefixIcon: Icon(Icons.person),
 
-          ),
-          maxLength: 10,
-          // validator: validateDob,
-
-        ),
       ),
+
+      // validator: validateDob,
+
     );
 
 
@@ -199,7 +194,7 @@ String address;
 
           decoration: new InputDecoration(
               hintText: 'No chance',
-              prefixIcon: Icon(Icons.calendar_today),
+             // prefixIcon: Icon(Icons.calendar_today),
 
           ),
           maxLength: 10,
@@ -243,24 +238,16 @@ String address;
     );
 
 
-    final addressTxtBox = InkWell(
+    final addressTxtBox = new TextField(
 
-      child: IgnorePointer(
-        child: new TextField(
+      decoration: new InputDecoration(
+        hintText: ("Address"),
+        prefixIcon: Icon(Icons.home),
 
-
-          controller:  setRationDistributionDate,
-
-          decoration: new InputDecoration(
-            hintText: ("Address"),
-            prefixIcon: Icon(Icons.home),
-
-          ),
-          maxLength: 10,
-          // validator: validateDob,
-
-        ),
       ),
+
+      // validator: validateDob,
+
     );
 
 

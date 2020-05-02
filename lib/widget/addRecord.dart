@@ -63,24 +63,22 @@ class AddRecord extends StatelessWidget {
 
 
 
+/*
+    final familyHeadNameTextBox = new TextField(
 
-    final familyHeadNameTextBox = InkWell(
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Enter a search term'
+      ),
 
-      child: IgnorePointer(
-        child: new TextField(
+    );
+
+*/
 
 
-
-
-          decoration: new InputDecoration(
-            hintText: ("Dildar Khan"),
-            prefixIcon: Icon(Icons.person),
-
-          ),
-          maxLength: 10,
-          // validator: validateDob,
-
-        ),
+    final familyHeadNameTextBox =  new TextFormField(
+      decoration: InputDecoration(
+          labelText: 'Enter your username'
       ),
     );
 
@@ -237,26 +235,18 @@ class AddRecord extends StatelessWidget {
     );
 
 
-    final addressTxtBox = InkWell(
-
-      child: IgnorePointer(
-        child: new TextField(
+    final addressTxtBox = new TextField(
 
 
-          controller:  setRationDistributionDate,
+    decoration: new InputDecoration(
+    hintText: ("Wasim Bagh 13 D-2 Gulshan"),
+    prefixIcon: Icon(Icons.home),
 
-          decoration: new InputDecoration(
-            hintText: ("Wasim Bagh 13 D-2 Gulshan"),
-            prefixIcon: Icon(Icons.home),
+    ),
 
-          ),
-          maxLength: 10,
-          // validator: validateDob,
+    // validator: validateDob,
 
-        ),
-      ),
     );
-
 
 
 

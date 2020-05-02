@@ -9,109 +9,80 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
+
+
+
+  final textField =  TextField(
+    decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: 'Enter a search term'
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
-        elevation: .1,
-        backgroundColor: Color.fromRGBO(49, 87, 110, 1.0),
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text("Dashboard"),
       ),
-      body: Container(
-
-        child: GridView.count(crossAxisCount: 1, padding: EdgeInsets.all(1.0), children: <Widget>[
-
-          makeDashboardItem2('Ordbog', Icons.book),
-
-        ],),
-
-
-
-
-
-
-
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Invoke "debug painting" (press "p" in the console, choose the
+          // "Toggle Debug Paint" action from the Flutter Inspector in Android
+          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+          // to see the wireframe for each widget.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.display1,
+            ),
+            textField
+          ],
+        ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
-  Card makeDashboardItem(String title, IconData icon) {
-    return Card(
-      elevation: 1.0,
-      margin: EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(220, 220, 220, 1.0),
-        ),
-        child: InkWell(
-          onTap: () {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            verticalDirection: VerticalDirection.down,
-            children: <Widget>[
-              SizedBox(height: 50.0,),
-              Center(
-                child: Icon(
-                  icon,
-                  size: 40.0,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 20.0,),
-              Center(
-                child: Text(title, style: TextStyle(fontSize: 18.0, color: Colors.black),),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-
-
-
-
-
-
-  Card makeDashboardItem2(String title, IconData icon) {
-    return Card(
-
-      elevation: 1.0,
-      margin: EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(220, 220, 220, 1.0),
-
-        ),
-        child: InkWell(
-          onTap: () {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            verticalDirection: VerticalDirection.down,
-            children: <Widget>[
-              SizedBox(height: 50.0,),
-              Center(
-                child: Icon(
-                  icon,
-                  size: 40.0,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 20.0,),
-              Center(
-                child: Text(title, style: TextStyle(fontSize: 18.0, color: Colors.black),),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-
 
 
 }

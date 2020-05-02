@@ -8,6 +8,8 @@ import 'widget/addRecord.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
+
   final routes = <String,WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
     HomePage.tag: (context) => HomePage(),
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.lightBlue,
         fontFamily: 'Nuito'
       ),
-      home: LoginPage(),
+      home: HomePage(),
       routes: routes,
     );
   }
