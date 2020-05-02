@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 int _selectedIndex = 0;
 
@@ -10,6 +11,15 @@ class AddRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+
+
+
+
+
+
+
 
 
     final welcome = Padding(

@@ -62,24 +62,13 @@ class _LoginPageState extends State<LoginPage> {
     int statusCode = response.statusCode;
     print(response.body);
     Map record = json.decode(response.body);
-   // Map status = json.decode(response.body);
-  //  print(status[status]);
 
-     //this.address = record['record']['address'].toString();
-     String family_head = record['details']['family_head'].toString();
-     String address = record['details']['address'].toString();
-     String cnic = record['details']['cnic'].toString();
-    // print(response.body.status);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('address', address);
-    prefs.setString('cnic', address);
-
-
-    prefs.setString('family_head', address).then((bool status){
-      print("Data saved successfully into sharedpreference");
-
-    });
+    prefs.setString('address', record['details']['address'].toString());
+    prefs.setString('cnic', record['details']['cnic'].toString());
+    prefs.setString('family_head', record['details']['family_head'].toString());
+    prefs.setString('ration_distribution_date', record['details']['ration_distribution_date'].toString());
 
 
 

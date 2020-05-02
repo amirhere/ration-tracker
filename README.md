@@ -1,6 +1,6 @@
-# login-app-ui-flutter
+# Ration Tracker app for COVID-19
 
-A new Flutter project.
+Get to know the family record who have been receiving or want to receive ration.
 
 ## Getting Started
 
@@ -14,6 +14,4 @@ A few resources to get you started if this is your first Flutter project:
 ## dashboard Page Design:
 ![Kamrul Expo dashboard](/images/dashboard.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+

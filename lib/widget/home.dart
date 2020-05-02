@@ -15,20 +15,20 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
   // String family_head;
   // String cnic;
 
-   var address;
+   var address = TextEditingController();
    var family_head = TextEditingController();
-   var cnic = TextEditingController();
+   var ration_distribution_date = TextEditingController();
+   var setRationDistributionDate;
 
    void loginRequest () async {
 
-
      SharedPreferences prefs = await SharedPreferences.getInstance();
-     _address = prefs.getString('address');
-     print("Socha na thaa" + _address);
-     address =  new TextEditingController.fromValue(new TextEditingValue(text: _address)).value;
 
+     address.text = prefs.getString('address').toString();;
+     family_head.text = prefs.getString('family_head').toString();
+     setRationDistributionDate.text = prefs.getString('ration_distribution_date').toString();
 
-   }
+    }
 
 
    loginRequest();
@@ -103,7 +103,7 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
 
     final familyHeadNameTextBox = new TextField(
-      controller: address,
+      controller: family_head,
       decoration: new InputDecoration(
         hintText: ("Dildar Khan "),
         prefixIcon: Icon(Icons.person),
@@ -155,7 +155,7 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
 
 
-  var setRationDistributionDate = TextEditingController();
+  setRationDistributionDate = TextEditingController();
   DateTime  _dateTime;
 
   _selectDate(){
@@ -239,6 +239,7 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
 
     final addressTxtBox = new TextField(
+      controller: address,
 
       decoration: new InputDecoration(
         hintText: ('Landhi no. 3'),
