@@ -40,41 +40,63 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginRequest () async {
 
-    final uri = 'http://eb549d96.ngrok.io/findRecord.php';
+   /* final uri = 'http://d1ecfd1f.ngrok.io/findRecord.php';
     final headers = {'Content-Type': 'application/json'};
-    Map<String, dynamic> body = {
-      "cnic": "4230193097619"
 
-    };
 
-    String jsonBody = json.encode(body);
-    final encoding = Encoding.getByName('utf-8');
+    body: jsonEncode(<String, String>{
+      'cnic': '4230193097419',
+    });
+*/
 
-    Response response = await post(
-      uri,
-      headers: headers,
-      body: jsonBody,
-      encoding: encoding,
+    final http.Response response = await http.post(
+      'http://346587b4.ngrok.io/findRecord.php',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'cnic': '4230193097419',
+      }),
     );
 
 
-
-    int statusCode = response.statusCode;
     print(response.body);
-    Map record = json.decode(response.body);
+
+   // Map record = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+
+      print(response.body);
+
+      Map record = json.decode(response.body);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('address', record['details']['address'].toString());
+      prefs.setString('cnic', record['details']['cnic'].toString());
+      prefs.setString('family_head', record['details']['family_head'].toString());
+      prefs.setString('ration_distribution_date', record['details']['ration_distribution_date'].toString());
 
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('address', record['details']['address'].toString());
-    prefs.setString('cnic', record['details']['cnic'].toString());
-    prefs.setString('family_head', record['details']['family_head'].toString());
-    prefs.setString('ration_distribution_date', record['details']['ration_distribution_date'].toString());
 
 
 
-    if(statusCode == 200){
+
+
+
+
       Navigator.of(context).pushNamed(HomePage.tag);
+
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
     }
+
+
+
+
 
   }
 
