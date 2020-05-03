@@ -36,18 +36,47 @@ class LoginPage extends StatefulWidget{
 class _LoginPageState extends State<LoginPage> {
 
 
+  void _showDialog(String message){
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+
+          title: new Text (message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Add family record"),
+              onPressed: () {
+
+
+               // Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(HomePage.tag);
+                // Navigator.of(context).pushNamed();
+              },
+            ),
+          ],
+
+        );
+      },
+    );
+
+  }
+
+
+
+
+
+
+
+
   // String address = "lima chuchu";
+
+  var family_num = TextEditingController();
 
   void loginRequest () async {
 
-   /* final uri = 'http://d1ecfd1f.ngrok.io/findRecord.php';
-    final headers = {'Content-Type': 'application/json'};
 
-
-    body: jsonEncode(<String, String>{
-      'cnic': '4230193097419',
-    });
-*/
 
     final http.Response response = await http.post(
       'http://346587b4.ngrok.io/findRecord.php',
@@ -55,43 +84,57 @@ class _LoginPageState extends State<LoginPage> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'cnic': '4230193097419',
+        'cnic': family_num.text.toString(),
       }),
     );
 
 
     print(response.body);
 
-   // Map record = json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
 
-      print(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
 
       Map record = json.decode(response.body);
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('address', record['details']['address'].toString());
-      prefs.setString('cnic', record['details']['cnic'].toString());
-      prefs.setString('family_head', record['details']['family_head'].toString());
-      prefs.setString('ration_distribution_date', record['details']['ration_distribution_date'].toString());
+      if(record['status'].toString() == "true"){
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('address', record['details']['address'].toString());
+        prefs.setString('cnic', record['details']['cnic'].toString());
+        prefs.setString('family_head', record['details']['family_head'].toString());
+        prefs.setString('ration_distribution_date', record['details']['ration_distribution_date'].toString());
+
+        Navigator.of(context).pushNamed(HomePage.tag);
+
+
+      }else{
+
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('address', "");
+        prefs.setString('cnic', "");
+        prefs.setString('family_head', "");
+        prefs.setString('ration_distribution_date', "");
 
 
 
+        _showDialog("No record found");
+      }
 
 
 
-
-
-
-      Navigator.of(context).pushNamed(HomePage.tag);
 
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+
+     // print();
+
+      _showDialog("Please check your internet connection");
+
+      throw Exception('Please check your internet connection');
     }
 
 
@@ -130,6 +173,7 @@ class _LoginPageState extends State<LoginPage> {
   //  ProgressDialog pr;
 
     final email = TextFormField(
+      controller: family_num,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
      // initialValue: 'khasancsit@gmail.com',
@@ -180,34 +224,6 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-
-
-    void _showDialog(){
-          showDialog(
-           context: context,
-            builder: (BuildContext context){
-              return AlertDialog(
-
-                title: new Text ("Record not found"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  new FlatButton(
-                    child: new Text("Add family record"),
-                    onPressed: () {
-
-
-                      Navigator.of(context).pop();
-                      //Navigator.of(context).pushNamed(HomePage.tag);
-                     // Navigator.of(context).pushNamed();
-                    },
-                  ),
-                ],
-
-              );
-            },
-          );
-
-      }
 
 
 

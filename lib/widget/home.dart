@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+
+import 'dart:async';
+import 'dart:convert';
+
+
+import 'package:http/http.dart';
+
 
 int _selectedIndex = 0;
 
@@ -11,22 +20,40 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
  @override
   Widget build(BuildContext context) {
-   String _address;
+
   // String family_head;
   // String cnic;
 
    var address = TextEditingController();
    var family_head = TextEditingController();
    var ration_distribution_date = TextEditingController();
+
    var setRationDistributionDate;
+
+   String _cnic;
+   String _address;
+   String _family_head;
+   String _ration_distribution_date;
+
 
    void loginRequest () async {
 
      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-     address.text = prefs.getString('address').toString();;
+
+     address.text = prefs.getString('address').toString();
      family_head.text = prefs.getString('family_head').toString();
      setRationDistributionDate.text = prefs.getString('ration_distribution_date').toString();
+
+
+
+     _cnic = prefs.getString('cnic').toString();
+     _address = prefs.getString('address').toString();
+     _family_head = prefs.getString('family_head').toString();
+     _ration_distribution_date = prefs.getString('ration_distribution_date').toString();
+
+
+
 
     }
 
@@ -254,15 +281,60 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
 
 
-    final saveInfoBtn = Padding(
+
+   void saveInfoRequest () async {
+
+
+     final uri = 'http://346587b4.ngrok.io/insert_family_record.php';
+     final headers = {'Content-Type': 'application/json'};
+     Map<String, dynamic> body = {
+       "address": address.text,
+       "cnic": _cnic,
+       "family_head": family_head.text,
+       "ration_distribution_date": ration_distribution_date.text
+
+     };
+
+     String jsonBody = json.encode(body);
+     final encoding = Encoding.getByName('utf-8');
+
+     Response response = await post(
+       uri,
+       headers: headers,
+       body: jsonBody,
+       encoding: encoding,
+     );
+
+
+      int statusCode = response.statusCode;
+       print(response.body);
+    //  Map record = json.decode(response.body);
+
+     if(statusCode == 200){
+
+       print(response.body);
+
+     }else{}
+
+   }
+
+
+
+
+
+
+
+
+
+   final saveInfoBtn = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: (){
-
-          Navigator.of(context).pushNamed(HomePage.tag);
+          saveInfoRequest();
+          //Navigator.of(context).pushNamed(HomePage.tag);
           // launchWebView();
 
         },
@@ -274,7 +346,16 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
 
 
-    final body = Container(
+
+
+
+
+
+
+
+
+
+   final body = Container(
     width: MediaQuery.of(context).size.width,
     padding: EdgeInsets.all(28.0),
     decoration: BoxDecoration(
