@@ -10,25 +10,30 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 
-int _selectedIndex = 0;
+
 
 class HomePage extends StatelessWidget {
+
+
   static String tag = 'home-page';
-static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  var address = TextEditingController();
+  var family_head = TextEditingController();
+  var ration_distribution_date = TextEditingController();
+  var setRationDistributionDate = TextEditingController();
 
 
 
- @override
+
+  @override
   Widget build(BuildContext context) {
 
   // String family_head;
   // String cnic;
 
-   var address = TextEditingController();
-   var family_head = TextEditingController();
-   var ration_distribution_date = TextEditingController();
 
-   var setRationDistributionDate;
+
 
    String _cnic;
    String _address;
@@ -45,17 +50,31 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
      family_head.text = prefs.getString('family_head').toString();
      setRationDistributionDate.text = prefs.getString('ration_distribution_date').toString();
 
-
-
      _cnic = prefs.getString('cnic').toString();
      _address = prefs.getString('address').toString();
      _family_head = prefs.getString('family_head').toString();
      _ration_distribution_date = prefs.getString('ration_distribution_date').toString();
 
+     var array = _ration_distribution_date.split('-');
 
 
 
-    }
+     DateTime dt = DateTime.now();
+     DateTime lrd = DateTime.utc(int.parse(array[0]),int.parse(array[1]),int.parse(array[2]));
+     int diffDays = dt.difference(lrd).inDays;
+
+     print(diffDays);
+
+     /*
+     if(diffDays > 30)
+     //  setRationDistributionDate.enabled = true;
+     else
+      // setRationDistributionDate.enabled = false;
+
+*/
+
+
+   }
 
 
    loginRequest();
@@ -182,16 +201,13 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
 
 
-  setRationDistributionDate = TextEditingController();
-  DateTime  _dateTime;
-
   _selectDate(){
     var _dateTimeNotifier;
     Future<DateTime> selectedDate = showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2018),
-      lastDate: DateTime(2030),
+      lastDate: DateTime.now(),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.light(),
@@ -201,6 +217,8 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
       },
     ).then((date){
 
+
+
       setRationDistributionDate.text = date.day.toString()+"/"+date.month.toString()+"/"+date.year.toString();
 
     });
@@ -208,13 +226,21 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
 
 
-    final rationDistributedDate = InkWell(
+
+
+   void setDateTextField (){
+
+   }
+
+
+   final rationDistributedDate = InkWell(
       onTap: () {
         _selectDate();   // Call Function that has showDatePicker()
 
       },
       child: IgnorePointer(
         child: new TextField(
+          enabled: false,
 
 
           controller:  setRationDistributionDate,
@@ -285,13 +311,14 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
    void saveInfoRequest () async {
 
 
-     final uri = 'http://346587b4.ngrok.io/insert_family_record.php';
+     final uri = 'http://dc72b6a8.ngrok.io/insert_family_record.php';
      final headers = {'Content-Type': 'application/json'};
      Map<String, dynamic> body = {
        "address": address.text,
        "cnic": _cnic,
        "family_head": family_head.text,
-       "ration_distribution_date": ration_distribution_date.text
+       "ration_distribution_date": ration_distribution_date.text,
+       "operation": "insert"
 
      };
 

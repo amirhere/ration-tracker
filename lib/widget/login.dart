@@ -8,6 +8,8 @@ import 'package:http/http.dart';
 import 'package:login_app_flutter/widget/home.dart';
 import 'package:http/http.dart' as http;
 
+import 'addRecord.dart';
+
 
 
 
@@ -49,9 +51,8 @@ class _LoginPageState extends State<LoginPage> {
               child: new Text("Add family record"),
               onPressed: () {
 
-
-               // Navigator.of(context).pop();
-                Navigator.of(context).pushNamed(HomePage.tag);
+                Navigator.pop(context); // dismiss hte alert dialog
+                Navigator.of(context).pushNamed(AddRecord.tag);
                 // Navigator.of(context).pushNamed();
               },
             ),
@@ -79,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
     final http.Response response = await http.post(
-      'http://346587b4.ngrok.io/findRecord.php',
+      'http://dc72b6a8.ngrok.io/findRecord.php',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

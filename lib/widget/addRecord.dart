@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+
+import 'dart:async';
+import 'dart:convert';
+
+
+import 'package:http/http.dart';
+
 
 int _selectedIndex = 0;
 
@@ -7,20 +16,37 @@ class AddRecord extends StatelessWidget {
   static String tag = 'add-record';
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
+  var address = TextEditingController();
+  var family_head = TextEditingController();
+  var ration_distribution_date = TextEditingController();
+  var cnic_number = TextEditingController();
 
 
   @override
   Widget build(BuildContext context) {
 
+    // String family_head;
+    // String cnic;
 
 
 
+    var setRationDistributionDate;
+
+    String _cnic;
+    String _address;
+    String _family_head;
+    String _ration_distribution_date;
 
 
 
-
-
-
+    final alucard = Hero(
+      tag: 'hero',
+      child: CircleAvatar(
+        radius: 40.0,
+        backgroundColor: Colors.blueGrey,
+        backgroundImage: AssetImage('asserts/kamrul.png'),
+      ),
+    );
 
     final welcome = Padding(
       padding: EdgeInsets.all(8.0),
@@ -44,16 +70,58 @@ class AddRecord extends StatelessWidget {
 
 
 
-
-    final familyHeadName = Text(
-      'Enter name of family Head',
+    final cnicNumber = Text(
+      'CNIC Number',
       textAlign: TextAlign.left,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(fontWeight: FontWeight.bold),
     );
 
 
+    final  cnicNumberUrdu = Padding(
+        padding: EdgeInsets.only(
+          left:180,
+        ),
+        child:  Image(
+            image: AssetImage('asserts/cnic_num.png'),
+            // width: 10,
+            height:18
+        )
+    );
 
+
+
+
+    final cnicNumberTextBox = new TextField(
+      controller: cnic_number,
+      decoration: new InputDecoration(
+        hintText: ("4230193095619 "),
+        prefixIcon: Icon(Icons.person),
+
+      ),
+
+      // validator: validateDob,
+
+    );
+
+
+
+
+
+    final familyHeadName = Text(
+      'Name of family Head',
+      textAlign: TextAlign.left,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(fontWeight: FontWeight.bold),
+    );
+
+
+    /*  final familyHeadNameUrdu = Hero(
+      tag: 'hero',
+      child: Image.asset('asserts/logo.png'),
+    );
+
+    */
 
 
 
@@ -73,23 +141,17 @@ class AddRecord extends StatelessWidget {
 
 
 
-/*
+
     final familyHeadNameTextBox = new TextField(
+      controller: family_head,
+      decoration: new InputDecoration(
+        hintText: ("Dildar Khan "),
+        prefixIcon: Icon(Icons.person),
 
-      decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Enter a search term'
       ),
 
-    );
+      // validator: validateDob,
 
-*/
-
-
-    final familyHeadNameTextBox =  new TextFormField(
-      decoration: InputDecoration(
-          labelText: 'Enter your username'
-      ),
     );
 
 
@@ -110,15 +172,7 @@ class AddRecord extends StatelessWidget {
 
 
 
-    /*
-    final familyHeadNameUrdu = Text(
-      'Name of family member',
-      textAlign: TextAlign.left,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(fontWeight: FontWeight.bold),
-    );
 
-*/
 
     final rationDistributedDateTxt = Text(
       'Last Ration Distribution Date',
@@ -132,37 +186,7 @@ class AddRecord extends StatelessWidget {
 
 
 
-
-    /*  final rationDistributedDate = new GestureDetector(
-      onTap: () {
-        var _dateTimeNotifier;
-        Future<DateTime> selectedDate = showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2018),
-          lastDate: DateTime(2030),
-          builder: (BuildContext context, Widget child) {
-            return Theme(
-              data: ThemeData.light(),
-              child: child,
-
-            );
-          },
-        );
-   },
-      child: new Text(
-        '21 April 2020',
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 18),
-
-
-      )
-    );
-
-*/
-
-    var setRationDistributionDate = TextEditingController();
+    setRationDistributionDate = TextEditingController();
     DateTime  _dateTime;
 
     _selectDate(){
@@ -171,7 +195,7 @@ class AddRecord extends StatelessWidget {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2018),
-        lastDate: DateTime(2030),
+        lastDate: DateTime.now(),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.light(),
@@ -181,11 +205,20 @@ class AddRecord extends StatelessWidget {
         },
       ).then((date){
 
+
+
         setRationDistributionDate.text = date.day.toString()+"/"+date.month.toString()+"/"+date.year.toString();
 
       });
     }
 
+
+
+
+
+    void setDateTextField (){
+
+    }
 
 
     final rationDistributedDate = InkWell(
@@ -195,13 +228,14 @@ class AddRecord extends StatelessWidget {
       },
       child: IgnorePointer(
         child: new TextField(
+          enabled: false,
 
 
           controller:  setRationDistributionDate,
 
           decoration: new InputDecoration(
-            hintText: '24/04/2020',
-            prefixIcon: Icon(Icons.calendar_today),
+            hintText: 'No chance',
+            // prefixIcon: Icon(Icons.calendar_today),
 
           ),
           maxLength: 10,
@@ -224,12 +258,18 @@ class AddRecord extends StatelessWidget {
 
 
 
+
     final addressTxt = Text(
-      'Enter House Address',
+      'Enter CNIC Number',
       textAlign: TextAlign.left,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(fontWeight: FontWeight.bold),
     );
+
+
+
+
+
 
 
 
@@ -246,17 +286,76 @@ class AddRecord extends StatelessWidget {
 
 
     final addressTxtBox = new TextField(
+      controller: address,
 
+      decoration: new InputDecoration(
+        hintText: ('Landhi no. 3'),
+        prefixIcon: Icon(Icons.home),
 
-    decoration: new InputDecoration(
-    hintText: ("Wasim Bagh 13 D-2 Gulshan"),
-    prefixIcon: Icon(Icons.home),
+      ),
 
-    ),
-
-    // validator: validateDob,
+      // validator: validateDob,
 
     );
+
+
+
+
+
+    void saveInfoRequest () async {
+
+
+      final uri = 'http://dc72b6a8.ngrok.io/insert_family_record.php';
+      final headers = {'Content-Type': 'application/json'};
+
+      Map<String, dynamic> body = {
+        "address": address.text,
+        "cnic": cnic_number.text,
+        "family_head": family_head.text,
+        "ration_distribution_date": "2020/05/04",
+        "operation": "insert"
+
+      };
+
+      String jsonBody = json.encode(body);
+      final encoding = Encoding.getByName('utf-8');
+
+      Response response = await post(
+        uri,
+        headers: headers,
+        body: jsonBody,
+        encoding: encoding,
+      );
+
+
+      int statusCode = response.statusCode;
+      print(response.body);
+      //  Map record = json.decode(response.body);
+
+      if(statusCode == 200){
+
+
+        Map record = json.decode(response.body);
+
+        if(record['status'].toString() == "success"){
+          print(record['status'].toString());
+
+        }else{
+          print(record['status'].toString());
+        }
+
+
+        print(response.body);
+
+      }else{}
+
+    }
+
+
+
+
+
+
 
 
 
@@ -267,8 +366,8 @@ class AddRecord extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: (){
-
-         // Navigator.of(context).pushNamed(HomePage.tag);
+          saveInfoRequest();
+          //Navigator.of(context).pushNamed(HomePage.tag);
           // launchWebView();
 
         },
@@ -277,6 +376,15 @@ class AddRecord extends StatelessWidget {
         child: Text('Save',style: TextStyle(color: Colors.white),),
       ),
     );
+
+
+
+
+
+
+
+
+
 
 
 
@@ -295,6 +403,10 @@ class AddRecord extends StatelessWidget {
         children: <Widget>[
 
           SizedBox(height: 30.0),
+          cnicNumber,
+          cnicNumberUrdu,
+          cnicNumberTextBox,
+          SizedBox(height: 40.0),
           familyHeadName,
           familyHeadNameUrdu,
           familyHeadNameTextBox,
@@ -321,5 +433,18 @@ class AddRecord extends StatelessWidget {
       body: body,
 
     );
+
+
   }
+
+
+
+
+
+
+
+
+
+
+
 }
