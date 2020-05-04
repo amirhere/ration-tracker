@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:toast/toast.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -13,6 +13,10 @@ import 'package:http/http.dart';
 int _selectedIndex = 0;
 
 class AddRecord extends StatelessWidget {
+
+
+  bool isProgressBarVisible = false;
+
   static String tag = 'add-record';
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -22,20 +26,27 @@ class AddRecord extends StatelessWidget {
   var cnic_number = TextEditingController();
 
 
+  var setRationDistributionDate = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
 
-    // String family_head;
-    // String cnic;
+
+
+    void retrieveValue() async{
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      cnic_number.text = prefs.get('cnic').toString();
+
+
+    }
 
 
 
-    var setRationDistributionDate;
+   retrieveValue();
 
-    String _cnic;
-    String _address;
-    String _family_head;
-    String _ration_distribution_date;
+
 
 
 
@@ -94,8 +105,9 @@ class AddRecord extends StatelessWidget {
 
     final cnicNumberTextBox = new TextField(
       controller: cnic_number,
+      keyboardType: TextInputType.number,
       decoration: new InputDecoration(
-        hintText: ("4230193095619 "),
+        hintText: ("J3424F "),
         prefixIcon: Icon(Icons.person),
 
       ),
@@ -186,7 +198,7 @@ class AddRecord extends StatelessWidget {
 
 
 
-    setRationDistributionDate = TextEditingController();
+
     DateTime  _dateTime;
 
     _selectDate(){
@@ -205,9 +217,9 @@ class AddRecord extends StatelessWidget {
         },
       ).then((date){
 
+       // DateTime.now().day.toString()+'-'+DateTime.now().month.toString()+'-' +DateTime.now().year.toString(),
 
-
-        setRationDistributionDate.text = date.day.toString()+"/"+date.month.toString()+"/"+date.year.toString();
+        setRationDistributionDate.text = date.year.toString()+"-"+date.month.toString()+"-"+date.day.toString();
 
       });
     }
@@ -234,17 +246,19 @@ class AddRecord extends StatelessWidget {
           controller:  setRationDistributionDate,
 
           decoration: new InputDecoration(
-            hintText: 'No chance',
-            // prefixIcon: Icon(Icons.calendar_today),
+            hintText: 'YYYY-MM-DD',
+            prefixIcon: Icon(Icons.calendar_today),
 
           ),
-          maxLength: 10,
+
           // validator: validateDob,
 
         ),
       ),
     );
 
+
+  //  rationDistributionDate.text = DateTime.now().day.toString()+'-'+DateTime.now().month.toString()+'-' +DateTime.now().year.toString();
 
 
     final dna = Padding(
@@ -260,7 +274,7 @@ class AddRecord extends StatelessWidget {
 
 
     final addressTxt = Text(
-      'Enter CNIC Number',
+      'Enter Address',
       textAlign: TextAlign.left,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(fontWeight: FontWeight.bold),
@@ -305,14 +319,19 @@ class AddRecord extends StatelessWidget {
     void saveInfoRequest () async {
 
 
-      final uri = 'http://dc72b6a8.ngrok.io/insert_family_record.php';
+      Toast.show("Please wait...", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+
+
+
+
+      final uri = 'https://2cfceb87.ngrok.io/insert_family_record.php';
       final headers = {'Content-Type': 'application/json'};
 
       Map<String, dynamic> body = {
         "address": address.text,
         "cnic": cnic_number.text,
         "family_head": family_head.text,
-        "ration_distribution_date": "2020-05-04",
+        "ration_distribution_date": ration_distribution_date.text,
         "operation": "insert"
 
       };
@@ -340,8 +359,29 @@ class AddRecord extends StatelessWidget {
         if(record['status'].toString() == "success"){
           print(record['message'].toString());
 
+          Toast.show("record saved successfully", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+
+
+
+
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            Navigator.pop(context);
+
+          });
+
+
+
+
+
         }else{
-          print(record['message'].toString());
+          Toast.show("Error! Please try later", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+
+
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            Navigator.pop(context);
+
+          });
+
         }
 
 
@@ -350,6 +390,23 @@ class AddRecord extends StatelessWidget {
       }else{}
 
     }
+
+
+
+    var showProgressBar  = Visibility(
+
+
+      child: Image(
+          image: AssetImage('asserts/tenor.gif'),
+          width: 50,
+          height: 50
+      ),
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      visible: true,
+    );
+
 
 
 
@@ -366,7 +423,16 @@ class AddRecord extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: (){
-          saveInfoRequest();
+
+
+         if(family_head.text.length == 0 || address.text.length == 0 ){
+           Toast.show("Please fill all the fields inorder to procreed", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+
+         }else{
+           saveInfoRequest();
+         }
+
+
           //Navigator.of(context).pushNamed(HomePage.tag);
           // launchWebView();
 
@@ -419,6 +485,10 @@ class AddRecord extends StatelessWidget {
           lastDistributionDate,
           rationDistributedDate,
           SizedBox(height: 20.0),
+
+          if(isProgressBarVisible) showProgressBar,
+          SizedBox(height: 40.0),
+
           saveInfoBtn
         ],
       ),

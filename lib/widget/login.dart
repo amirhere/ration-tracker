@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
 
 
-  void _showDialog(String message){
+  void _showDialog(String message) {
     showDialog(
       context: context,
       builder: (BuildContext context){
@@ -56,7 +56,11 @@ class _LoginPageState extends State<LoginPage> {
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Add family record"),
-              onPressed: () {
+              onPressed: () async {
+
+
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('cnic', family_num.text.toString());
 
                 Navigator.pop(context); // dismiss hte alert dialog
                 Navigator.of(context).pushNamed(AddRecord.tag);
@@ -97,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
     final http.Response response = await http.post(
-      'http://dc72b6a8.ngrok.io/findRecord.php',
+      'https://2cfceb87.ngrok.io/findRecord.php',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -197,7 +201,8 @@ class _LoginPageState extends State<LoginPage> {
 
     final email = TextFormField(
       controller: family_num,
-      keyboardType: TextInputType.number,
+      maxLength: 6,
+      keyboardType: TextInputType.text,
       autofocus: false,
     //  keyboardType: TextInputType.number,
      // initialValue: 'khasancsit@gmail.com',
@@ -210,6 +215,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final password = TextFormField(
       keyboardType: TextInputType.number,
+      maxLength: 6,
       autofocus: false,
       obscureText: true,
       initialValue: '',
