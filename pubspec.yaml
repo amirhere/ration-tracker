@@ -19,6 +19,7 @@ environment:
 dependencies:
   http: ^0.12.0+4
   shared_preferences: 0.5.7
+  toast: ^0.1.5
 
 
 
@@ -51,6 +52,7 @@ flutter:
     - tenor.gif
     - poweredby.png
     - cnic_num.png
+
 
 
 

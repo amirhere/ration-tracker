@@ -9,6 +9,7 @@ import 'package:login_app_flutter/widget/home.dart';
 import 'package:http/http.dart' as http;
 
 import 'addRecord.dart';
+import 'package:toast/toast.dart';
 
 
 
@@ -20,7 +21,8 @@ class LoginPage extends StatefulWidget{
 
   static String tag ='login-page';
    //
-  bool status = true;
+
+
 
   @override
   _LoginPageState createState()=> new _LoginPageState();
@@ -36,6 +38,11 @@ class LoginPage extends StatefulWidget{
 
 
 class _LoginPageState extends State<LoginPage> {
+
+   bool isProgressBarVisible = false;
+
+
+  final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
 
 
   void _showDialog(String message){
@@ -79,6 +86,16 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
+
+
+    setState(() {
+      isProgressBarVisible = true;
+    });
+
+
+
+
+
     final http.Response response = await http.post(
       'http://dc72b6a8.ngrok.io/findRecord.php',
       headers: <String, String>{
@@ -89,6 +106,10 @@ class _LoginPageState extends State<LoginPage> {
       }),
     );
 
+
+    setState(() {
+      isProgressBarVisible = false;
+    });
 
     print(response.body);
 
@@ -157,6 +178,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
 
     bool status = true;
+   // bool isProgressBarVisible = false;
 
 
     final logo = Hero(
@@ -175,8 +197,9 @@ class _LoginPageState extends State<LoginPage> {
 
     final email = TextFormField(
       controller: family_num,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.number,
       autofocus: false,
+    //  keyboardType: TextInputType.number,
      // initialValue: 'khasancsit@gmail.com',
       decoration: InputDecoration(
         hintText: 'Enter family number',
@@ -186,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final password = TextFormField(
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.number,
       autofocus: false,
       obscureText: true,
       initialValue: '',
@@ -201,23 +224,21 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-    final showProgressBar =  Offstage(
-      offstage: true,
+
+
+
+    var showProgressBar  = Visibility(
+
+
       child: Image(
           image: AssetImage('asserts/tenor.gif'),
           width: 50,
           height: 50
       ),
-    );
-
-
-    final hideProgressBar =  Offstage(
-      offstage: false,
-      child: Image(
-          image: AssetImage('asserts/tenor.gif'),
-          width: 50,
-          height: 50
-      ),
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      visible: true,
     );
 
 
@@ -243,9 +264,19 @@ class _LoginPageState extends State<LoginPage> {
          // showProgressBar = true;
 
 
+          if(family_num.text.length == 0){
 
+
+            Toast.show("Please enter your Family Number", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+
+
+
+          }else{
+
+            loginRequest();
+          }
          // Navigator.of(context).pushNamed(HomePage.tag);
-         loginRequest();
+
 
         //  _showDialog();
 
@@ -285,6 +316,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -297,10 +329,8 @@ class _LoginPageState extends State<LoginPage> {
             email,
             SizedBox(height: 24.0),
             loginButton,
-            if(status)
-              showProgressBar
-             else
-               hideProgressBar,
+            //showProgressBar,
+              if(isProgressBarVisible) showProgressBar,
             SizedBox(height: 40.0),
             poweredBy
           ],
