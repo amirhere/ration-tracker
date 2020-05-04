@@ -312,7 +312,7 @@ class AddRecord extends StatelessWidget {
         "address": address.text,
         "cnic": cnic_number.text,
         "family_head": family_head.text,
-        "ration_distribution_date": "2020/05/04",
+        "ration_distribution_date": "2020-05-04",
         "operation": "insert"
 
       };
@@ -329,7 +329,7 @@ class AddRecord extends StatelessWidget {
 
 
       int statusCode = response.statusCode;
-      print(response.body);
+     // print(response.body);
       //  Map record = json.decode(response.body);
 
       if(statusCode == 200){
@@ -338,10 +338,10 @@ class AddRecord extends StatelessWidget {
         Map record = json.decode(response.body);
 
         if(record['status'].toString() == "success"){
-          print(record['status'].toString());
+          print(record['message'].toString());
 
         }else{
-          print(record['status'].toString());
+          print(record['message'].toString());
         }
 
 
