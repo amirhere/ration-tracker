@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
     final http.Response response = await http.post(
-      'https://2cfceb87.ngrok.io/findRecord.php',
+      'https://amiraslam.000webhostapp.com/ration_tracker/findRecord.php',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -188,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
-        backgroundColor: Colors.lightBlue,
+     //  backgroundColor: Colors.lightBlue,
         radius: 48.0,
         child: Image.asset('asserts/logo.png'),
       ),

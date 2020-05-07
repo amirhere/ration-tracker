@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:toast/toast.dart';
 
 
 import 'dart:async';
@@ -20,8 +21,41 @@ class HomePage extends StatelessWidget {
 
   var address = TextEditingController();
   var family_head = TextEditingController();
-  var ration_distribution_date = TextEditingController();
   var setRationDistributionDate = TextEditingController();
+
+  String cnic;
+  int x = 0;
+
+
+
+
+
+  void loginRequest () async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+
+    cnic = prefs.getString("cnic").toString();
+    address.text = prefs.getString('address').toString();
+    family_head.text = prefs.getString('family_head').toString();
+    setRationDistributionDate.text = prefs.getString('ration_distribution_date').toString();
+
+
+
+
+    /*
+     if(diffDays > 30)
+     //  setRationDistributionDate.enabled = true;
+     else
+      // setRationDistributionDate.enabled = false;
+
+*/
+
+
+  }
+
+
+
 
 
 
@@ -33,51 +67,13 @@ class HomePage extends StatelessWidget {
   // String cnic;
 
 
+    if(x == 0){
+
+    x =1;
+      loginRequest();
 
 
-   String _cnic;
-   String _address;
-   String _family_head;
-   String _ration_distribution_date;
-
-
-   void loginRequest () async {
-
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-
-     address.text = prefs.getString('address').toString();
-     family_head.text = prefs.getString('family_head').toString();
-     setRationDistributionDate.text = prefs.getString('ration_distribution_date').toString();
-
-     _cnic = prefs.getString('cnic').toString();
-     _address = prefs.getString('address').toString();
-     _family_head = prefs.getString('family_head').toString();
-     _ration_distribution_date = prefs.getString('ration_distribution_date').toString();
-
-     var array = _ration_distribution_date.split('-');
-
-
-
-     DateTime dt = DateTime.now();
-     DateTime lrd = DateTime.utc(int.parse(array[0]),int.parse(array[1]),int.parse(array[2]));
-     int diffDays = dt.difference(lrd).inDays;
-
-     print(diffDays);
-
-     /*
-     if(diffDays > 30)
-     //  setRationDistributionDate.enabled = true;
-     else
-      // setRationDistributionDate.enabled = false;
-
-*/
-
-
-   }
-
-
-   loginRequest();
+    }
 
 
 
@@ -150,6 +146,8 @@ class HomePage extends StatelessWidget {
 
     final familyHeadNameTextBox = new TextField(
       controller: family_head,
+      keyboardType: TextInputType.text,
+
       decoration: new InputDecoration(
         hintText: ("Dildar Khan "),
         prefixIcon: Icon(Icons.person),
@@ -293,7 +291,7 @@ class HomePage extends StatelessWidget {
 
     final addressTxtBox = new TextField(
       controller: address,
-
+      keyboardType: TextInputType.text,
       decoration: new InputDecoration(
         hintText: ('Landhi no. 3'),
         prefixIcon: Icon(Icons.home),
@@ -308,17 +306,21 @@ class HomePage extends StatelessWidget {
 
 
 
+
    void saveInfoRequest () async {
 
 
-     final uri = 'https://2cfceb87.ngrok.io/insert_family_record.php';
+     Toast.show("Please Wait...", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+
+
+     final uri = 'https://amiraslam.000webhostapp.com/ration_tracker/insert_family_record.php';
      final headers = {'Content-Type': 'application/json'};
      Map<String, dynamic> body = {
        "address": address.text,
-       "cnic": _cnic,
+       "cnic": cnic ,
        "family_head": family_head.text,
-       "ration_distribution_date": ration_distribution_date.text,
-       "operation": "insert"
+       "ration_distribution_date": setRationDistributionDate.text,
+       "operation": "update"
 
      };
 
@@ -341,7 +343,18 @@ class HomePage extends StatelessWidget {
 
        print(response.body);
 
-     }else{}
+       Toast.show("Record updated successfully", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+
+       Future.delayed(const Duration(milliseconds: 2000), () {
+         Navigator.pop(context);
+
+       });
+
+
+     }else{
+
+       Toast.show("Please check your internet connection", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+     }
 
    }
 

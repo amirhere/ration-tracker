@@ -22,7 +22,7 @@ class AddRecord extends StatelessWidget {
 
   var address = TextEditingController();
   var family_head = TextEditingController();
-  var ration_distribution_date = TextEditingController();
+ // var ration_distribution_date = TextEditingController();
   var cnic_number = TextEditingController();
 
 
@@ -240,9 +240,7 @@ class AddRecord extends StatelessWidget {
       },
       child: IgnorePointer(
         child: new TextField(
-          enabled: false,
-
-
+          enabled: true,
           controller:  setRationDistributionDate,
 
           decoration: new InputDecoration(
@@ -324,14 +322,14 @@ class AddRecord extends StatelessWidget {
 
 
 
-      final uri = 'https://2cfceb87.ngrok.io/insert_family_record.php';
+      final uri = 'https://amiraslam.000webhostapp.com/ration_tracker/insert_family_record.php';
       final headers = {'Content-Type': 'application/json'};
 
       Map<String, dynamic> body = {
         "address": address.text,
-        "cnic": cnic_number.text,
+        "cnic": cnic_number.text.toString(),
         "family_head": family_head.text,
-        "ration_distribution_date": ration_distribution_date.text,
+        "ration_distribution_date": setRationDistributionDate.text.toString(),
         "operation": "insert"
 
       };
