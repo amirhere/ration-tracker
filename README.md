@@ -1,14 +1,12 @@
 # Ration Tracker app for COVID-19
 
-Get to know the family record who have been receiving or want to receive ration.
+Helps you to track family record who have been receiving or received ration before.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+
 
 A few resources to get you started if this is your first Flutter project:
-## Login Page design:
-
+## App Logo:
 ![Kamrul Expo Login Page UI Design](/images/logo.png)
 
 ## dashboard Page Design:
