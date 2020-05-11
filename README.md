@@ -9,7 +9,7 @@ This project is a starting point for a Flutter application.
 A few resources to get you started if this is your first Flutter project:
 ## Login Page design:
 
-![Kamrul Expo Login Page UI Design](/images/login.png)
+![Kamrul Expo Login Page UI Design](/images/logo.png)
 
 ## dashboard Page Design:
 ![Kamrul Expo dashboard](/images/dashboard.png)
